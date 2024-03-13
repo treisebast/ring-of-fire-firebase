@@ -8,32 +8,31 @@ import {
   getDocs,
   onSnapshot,
 } from "@angular/fire/firestore";
-import { Game } from "../../models/game";
+import { Observable, Subject } from "rxjs";
 
 @Injectable({
   providedIn: "root",
 })
 export class CardjsonService {
-  game = new Game();
+  private dataSubject = new Subject<any>();
+  dataFromFirebase$: Observable<any> = this.dataSubject.asObservable();
+
   firestore = inject(Firestore);
 
   unsubGame!: Unsubscribe;
 
   constructor() {}
 
-  subGame(id: string) {
-    this.unsubGame = onSnapshot(doc(this.getGamesRef(), id), (doc) => {
-      if (doc.exists()) {
-        const game = doc.data();
-        // console.log(game['players']);
-        this.game.currentPlayer = game["currentPlayer"];
-        this.game.playedCards = game["playedCards"];
-        this.game.players = game["players"];
-        this.game.stack = game["stack"];
-        console.log(this.game.players);
-      }
+  subGame(id: string): Observable<any> {
+    return new Observable<any>(observer => {
+      this.unsubGame = onSnapshot(doc(this.getGamesRef(), id), (doc) => {
+        if (doc.exists()) {
+          const gameData = doc.data();
+          console.log('service', gameData);
+          observer.next(gameData); // Senden Sie aktualisierte Daten an die Observer
+        }
+      });
     });
-    // this.ngOnDestroy();
   }
 
   async addGame(item: {}) {
