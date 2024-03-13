@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { Game } from '../../models/game';
 import { PlayerComponent } from '../player/player.component';
 import { MatButtonModule } from '@angular/material/button';
@@ -8,6 +8,8 @@ import { MatDialog } from '@angular/material/dialog';
 import { DialogAddPlayerComponent } from '../dialog-add-player/dialog-add-player.component';
 import { GameInfoComponent } from '../game-info/game-info.component';
 import { MatCardModule } from '@angular/material/card';
+import { CardjsonService } from '../firebase-services/cardjson.service';
+import { ActivatedRoute } from '@angular/router';
 
 
 
@@ -21,25 +23,38 @@ import { MatCardModule } from '@angular/material/card';
 export class GameComponent implements OnInit {
   pickCardAnimation = false;
   currentCard: string = '';
-  game: Game = new Game();
+  game!: Game;
+  // service: CardjsonService = inject(CardjsonService);
 
-  constructor(public dialog: MatDialog) {}
+
+  constructor(private route: ActivatedRoute, public dialog: MatDialog, private service: CardjsonService) { 
+    
+   }
+
 
   ngOnInit(): void {
+    this.newGame();
+    this.route.params.subscribe((params) => {
+      let id:string = params['id'];
+      console.log(id);
+      this.service.subGame(id);
+    })
   }
 
   newGame() {
     this.game = new Game();
-    console.log(this.game);
+    // console.log(this.game);
+    // this.service.addGame(this.game.toJSON());
   }
+  
 
   takeCard() {
     if (!this.pickCardAnimation && this.game.stack.length > 0) {
       this.currentCard = this.game.stack.pop()!;
       this.pickCardAnimation = true;
 
-      console.log(this.currentCard);
-      console.log(this.game);
+      // console.log(this.currentCard);
+      // console.log(this.game);
 
       this.game.currentPlayer++;
       this.game.currentPlayer = this.game.currentPlayer % this.game.players.length;
