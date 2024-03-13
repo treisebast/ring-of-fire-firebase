@@ -29,7 +29,7 @@ export class GameComponent implements OnInit {
 
   constructor(private route: ActivatedRoute, public dialog: MatDialog, private service: CardjsonService) { 
     
-   }
+  }
 
 
   ngOnInit(): void {
@@ -39,6 +39,7 @@ export class GameComponent implements OnInit {
       console.log(id);
       this.service.subGame(id);
     })
+    
   }
 
   newGame() {
