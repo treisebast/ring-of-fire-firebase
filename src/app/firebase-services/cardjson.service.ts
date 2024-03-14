@@ -7,6 +7,7 @@ import {
   doc,
   getDocs,
   onSnapshot,
+  updateDoc,
 } from "@angular/fire/firestore";
 import { Observable, Subject } from "rxjs";
 
@@ -39,7 +40,7 @@ export class CardjsonService {
         if (doc.exists()) {
           let gameData = doc.data();
           console.log('service', gameData);
-          observer.next(gameData); // Senden Sie aktualisierte Daten an die Observer
+          observer.next(gameData); // Observable schickt Daten an View
         }
       });
     });
@@ -55,6 +56,22 @@ export class CardjsonService {
         console.log(err);
         return '';
       });
+  }
+
+  // Alternativ zu addGame mit try catch
+  // async addGame(item: {}): Promise<string> {
+  //   try {
+  //     const docRef = await addDoc(this.getGamesRef(), item);
+  //     console.log("Document written with ID: ", docRef.id);
+  //     return docRef.id;
+  //   } catch (err) {
+  //     console.log(err);
+  //     return '';
+  //   }
+  // }
+
+  updateGame(id: string, item: {}): Promise<void> {
+    return updateDoc(doc(this.getGamesRef(), id), item);
   }
 
   getGamesRef() {

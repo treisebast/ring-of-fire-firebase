@@ -21,51 +21,52 @@ import { ActivatedRoute } from '@angular/router';
   styleUrl: './game.component.scss'
 })
 export class GameComponent implements OnInit {
-  pickCardAnimation = false;
-  currentCard: string = '';
+
   game: Game = new Game();
-  // service: CardjsonService = inject(CardjsonService);
+  gameId: string = '';
+  // service: CardjsonService = inject(CardjsonService);                     // Alternativ auch so zu schreiben
 
 
-  constructor(private route: ActivatedRoute, public dialog: MatDialog, private service: CardjsonService) { 
-    
+  constructor(private route: ActivatedRoute, public dialog: MatDialog, private service: CardjsonService) {
+
   }
 
   ngOnInit(): any {
-    this.newGame();
+    // this.newGame();
     this.route.params.subscribe((params) => {
-      let id: string = params['id'];
+      this.gameId = params['id'];
       // console.log(id);
-      this.service.subGame(id).subscribe((data) => {
+      this.service.subGame(this.gameId).subscribe((data) => {
         // console.log('Daten von Firebase wurden aktualisiert', data);
         this.game = data;
-        // console.log('game.component', this.game);
       });
     });
   }
 
+  // newGame() {
+  //   this.game = new Game();
+  //   console.log(this.game);
+  // }
 
-
-  newGame() {
-    this.game = new Game();
-    // console.log(this.game);
+  updateGame() {
+    this.service.updateGame(this.gameId, this.game);
   }
-  
+
 
   takeCard() {
-    if (!this.pickCardAnimation && this.game.stack.length > 0) {
-      this.currentCard = this.game.stack.pop()!;
-      this.pickCardAnimation = true;
-
+    if (!this.game.pickCardAnimation && this.game.stack.length > 0) {
+      this.game.currentCard = this.game.stack.pop()!;
+      this.game.pickCardAnimation = true;
       // console.log(this.currentCard);
       // console.log(this.game);
-
       this.game.currentPlayer++;
       this.game.currentPlayer = this.game.currentPlayer % this.game.players.length;
+      this.updateGame();
 
       setTimeout(() => {
-        this.game.playedCards.push(this.currentCard);
-        this.pickCardAnimation = false;
+        this.game.playedCards.push(this.game.currentCard);
+        this.game.pickCardAnimation = false;
+        this.updateGame();
       }, 1000);
     }
   }
@@ -75,7 +76,8 @@ export class GameComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe((result: string) => {
       if (result && result.length > 0) {
-      this.game.players.push(result);
+        this.game.players.push(result);
+        this.updateGame();
       }
     });
   }
