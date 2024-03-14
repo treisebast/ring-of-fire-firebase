@@ -37,26 +37,18 @@ export class GameComponent implements OnInit {
       let id: string = params['id'];
       // console.log(id);
       this.service.subGame(id).subscribe((data) => {
-        console.log('Daten von Firebase wurden aktualisiert', data);
+        // console.log('Daten von Firebase wurden aktualisiert', data);
         this.game = data;
         // console.log('game.component', this.game);
       });
     });
   }
 
-// updateGameWithFirebaseData() {
-//     // Hier aktualisieren Sie Ihr Spiel mit den Daten von Firebase
-//     // Z.B. this.game = this.service.dataFromFirebase;
-//     this.service.dataFromFirebase$.subscribe(data => {
-//         this.game = data;
-//         console.log('Spiel wurde mit den Daten von Firebase aktualisiert', this.game);
-//     });
-// }
+
 
   newGame() {
     this.game = new Game();
     // console.log(this.game);
-    // this.service.addGame(this.game.toJSON());
   }
   
 
