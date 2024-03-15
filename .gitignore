@@ -1,6 +1,6 @@
 # See http://help.github.com/ignore-files/ for more about ignoring files.
 
-app.config.ts
+firebase.config.ts
 
 # Compiled output
 /dist

@@ -35,9 +35,7 @@ export class GameComponent implements OnInit {
     // this.newGame();
     this.route.params.subscribe((params) => {
       this.gameId = params['id'];
-      // console.log(id);
       this.service.subGame(this.gameId).subscribe((data) => {
-        // console.log('Daten von Firebase wurden aktualisiert', data);
         this.game = data;
       });
     });
@@ -81,6 +79,5 @@ export class GameComponent implements OnInit {
       }
     });
   }
-
 }
 

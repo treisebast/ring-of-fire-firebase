@@ -21,7 +21,7 @@ export class StartScreenComponent {
     let game = new Game();
     this.service.addGame(game.toJSON()).then(gameId => {
       this.router.navigateByUrl('/game/' + gameId);
-      console.log('startscreen', gameId);
+      // console.log('startscreen', gameId);
     });
   }
 }
