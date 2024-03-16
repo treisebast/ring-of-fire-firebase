@@ -13,9 +13,7 @@ import { Game } from '../../models/game';
 })
 export class StartScreenComponent {
 
-  constructor(private router:Router, private service: CardjsonService) {
-
-  }
+  constructor(private router:Router, private service: CardjsonService) { }
 
   newGame() {
     let game = new Game();

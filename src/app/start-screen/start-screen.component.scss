@@ -1,15 +1,21 @@
 .start-screen{
     background-color: #404040;
-    width: 100vw;
-    height: 100vh;
-    max-width: 100%;
+    width: auto;
+    max-width: 100vw;
+    height: 100vh; 
     display: flex;
     justify-content: center;
     align-items: center;
     img{        
-        height: 100vh;
+        height: 85vh;
         max-width: 100vw;
-        object-fit: contain;
+    }
+
+    @media screen and (max-width: 1000px) {
+        img {
+            height: 100vh;
+            object-fit: cover;
+        }
     }
 }
 
@@ -17,11 +23,11 @@
     position: absolute;
     left: 0;
     right: 0; 
-    bottom: 50px;
+    bottom: 15vh;
     display: flex;
     justify-content: center;
     img{
-        width: 40vw;
+        width: 650px;
         height: auto;
 
         &:hover{
@@ -29,4 +35,23 @@
             cursor: pointer;
         }
     };
+
+    @media screen and (max-width: 1500px) and ( max-height: 900px) {
+        img {
+            width: 400px;
+        }
+    }
+ 
+    @media screen and (max-width: 900px) {
+        img {
+            max-width: 400px;
+            width: 90%;
+        }
+    }
+
+    @media screen and ( max-height: 700px) {
+        img {
+            width: 250px;
+        }
+    }
 }
