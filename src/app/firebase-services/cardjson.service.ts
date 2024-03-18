@@ -30,7 +30,7 @@ export class CardjsonService {
       this.unsubGame = onSnapshot(doc(this.getGamesRef(), id), (doc) => {
         if (doc.exists()) {
           let gameData = doc.data();
-          // console.log('service', gameData);
+          console.log('service', gameData);
           observer.next(gameData); // Observable schickt Daten an View
         }
       });

@@ -1,23 +1,37 @@
-<app-player *ngFor="let player of game.players; let i = index" [ngStyle]="{'top.px': 60 + (i * 80)}" [name]='player'
-    [playerActive]='i == game.currentPlayer' class="player-position hide-desktop"></app-player>
+<div *ngIf="!gameOver">
+    <app-player (click)="editPlayer(i)" *ngFor="let player of game.players; let i = index"
+        [ngStyle]="{'top.px': 24 + (i * 60)}" [image]="game.player_images[i]" [name]='player'
+        [playerActive]='i == game.currentPlayer' class="player-position hide-desktop"></app-player>
+</div>
 
-<div class="scroll-container">
-    <app-player-mobile *ngFor="let player of game.players; let i = index" [name]='player'
-        [color]="'rgba(50,50,50, 0.8)'" [playerActive]='i == game.currentPlayer'
-        class="player-position-mobile hide-mobile"></app-player-mobile>
+<div *ngIf="!gameOver" class="scroll-container">
+    <app-player-mobile (click)="editPlayer(i)" *ngFor="let player of game.players; let i = index"
+        [image]="game.player_images[i]" [name]='player' [color]="'rgba(50,50,50, 0.8)'"
+        [playerActive]='i == game.currentPlayer' class="player-position-mobile hide-mobile"></app-player-mobile>
+</div>
+
+<div *ngIf="gameOver" class="game-over">
+    <img src="./../../assets/img/game_over.png">
 </div>
 
 
-<div class="field">
+
+
+
+<div *ngIf="!gameOver" class="field">
     <div class="card-stack">
+        <!-- preload images -->
+        <img class="preload-image" src="./assets/img/cards/{{game.stack[game.stack.length - 1]}}.png">
+        
         <!-- Card stack -->
         <img [ngStyle]="{'right.px': i * 0.5, 'transform': 'rotate(' + (i) / 3 + 'deg)'}"
             *ngFor="let item of game.stack; let i = index;" src="./assets/img/cards/card-backside.png">
 
         <!-- first card -->
-        <img (click)="game.players.length >= 2 && takeCard()" (click)="game.players.length < 2 && openDialogInfo('200ms', '150ms')" 
-            [ngStyle]="{'right.px': game.stack.length * 0.5, 'transform': 'rotate(' + (game.stack.length / 3) + 'deg)'}" class="first-card"
-             src="./assets/img/cards/card-backside.png">
+        <img (click)="game.players.length >= 2 && takeCard()"
+            (click)="game.players.length < 2 && openDialogInfo('200ms', '150ms')"
+            [ngStyle]="{'right.px': game.stack.length * 0.5, 'transform': 'rotate(' + (game.stack.length / 3) + 'deg)'}"
+            class="first-card" src="./assets/img/cards/card-backside.png">
 
         <!-- Stack for played cards -->
         <img *ngFor="let card of game.playedCards" class="played-card" src="./assets/img/cards/{{card}}.png">
@@ -30,8 +44,8 @@
 </div>
 
 
-<button mat-fab color="primary" (click)="openDialog()" class="btn-add" *ngIf="game.currentCard == ''">
+<button *ngIf="!gameOver" mat-fab color="primary" (click)="openDialog()" class="btn-add">
     <mat-icon>add</mat-icon>
 </button>
 
-<app-game-info [card]="game.currentCard" class="pin-bottom"></app-game-info>
+<app-game-info *ngIf="!gameOver" [card]="game.currentCard" class="pin-bottom"></app-game-info>

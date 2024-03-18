@@ -1,0 +1,24 @@
+h1{
+    font-size: 32px !important;
+}
+
+.profile-pictures-container{
+    overflow: hidden;
+    
+    img{
+        margin: 8px;
+    }
+}
+
+.profile-picture{
+    width: 100px;
+    height: 100px;
+    cursor: pointer;
+    object-fit: contain;
+    &:hover{
+        transform: scale(1.1);
+        filter: brightness(1.1);
+    }
+}
+
+
