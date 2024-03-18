@@ -12,6 +12,7 @@ import { CardjsonService } from '../firebase-services/cardjson.service';
 import { ActivatedRoute } from '@angular/router';
 import { PlayerMobileComponent } from '../player-mobile/player-mobile.component';
 import { DialogInfoPlayerComponent } from '../dialog-info-player/dialog-info-player.component';
+import { EditPlayerComponent } from '../edit-player/edit-player.component';
 
 
 
@@ -24,6 +25,7 @@ import { DialogInfoPlayerComponent } from '../dialog-info-player/dialog-info-pla
 })
 export class GameComponent implements OnInit {
 
+  gameOver: boolean = false;
   game: Game = new Game();
   gameId: string = '';
   // service: CardjsonService = inject(CardjsonService);                     // Alternativ auch so zu schreiben
@@ -54,7 +56,9 @@ export class GameComponent implements OnInit {
 
 
   takeCard() {
-    if (!this.game.pickCardAnimation && this.game.stack.length > 0) {
+    if (this.game.stack.length == 0) {
+      this.gameOver = true;
+    } else if (!this.game.pickCardAnimation && this.game.stack.length > 0) {
       this.game.currentCard = this.game.stack.pop()!;
       this.game.pickCardAnimation = true;
       // console.log(this.currentCard);
@@ -71,12 +75,33 @@ export class GameComponent implements OnInit {
     }
   }
 
-  openDialog(): void {
+
+  editPlayer(playerId: number) {                                  // https://material.angular.io/components/dialog/overview#dialog-overview
+    const dialogRef = this.dialog.open(EditPlayerComponent);
+    dialogRef.afterClosed().subscribe((change: string) => {
+      if (change) {
+        if (change == 'DELETE') {
+          this.game.players.splice(playerId, 1);
+          this.game.player_images.splice(playerId, 1);
+          this.updateGame();
+
+        } else {
+          this.game.player_images[playerId] = change;
+          this.updateGame();
+        }
+      }
+    });
+  }
+
+
+  openDialog(): void {                                             // https://material.angular.io/components/dialog/overview#dialog-overview
     const dialogRef = this.dialog.open(DialogAddPlayerComponent);
 
     dialogRef.afterClosed().subscribe((result: string) => {
       if (result && result.length > 0) {
         this.game.players.push(result);
+        this.game.player_images.push('penguin-4871045_640.png');
+
         this.updateGame();
       }
     });
