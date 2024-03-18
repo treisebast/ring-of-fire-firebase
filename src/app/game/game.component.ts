@@ -11,6 +11,7 @@ import { MatCardModule } from '@angular/material/card';
 import { CardjsonService } from '../firebase-services/cardjson.service';
 import { ActivatedRoute } from '@angular/router';
 import { PlayerMobileComponent } from '../player-mobile/player-mobile.component';
+import { DialogInfoPlayerComponent } from '../dialog-info-player/dialog-info-player.component';
 
 
 
@@ -78,6 +79,14 @@ export class GameComponent implements OnInit {
         this.game.players.push(result);
         this.updateGame();
       }
+    });
+  }
+
+  openDialogInfo(enterAnimationDuration: string, exitAnimationDuration: string): void {
+    this.dialog.open(DialogInfoPlayerComponent, {
+      width: '250px',
+      enterAnimationDuration,
+      exitAnimationDuration,
     });
   }
 }
