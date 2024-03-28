@@ -13,7 +13,7 @@ import { ActivatedRoute } from '@angular/router';
 import { PlayerMobileComponent } from '../player-mobile/player-mobile.component';
 import { DialogInfoPlayerComponent } from '../dialog-info-player/dialog-info-player.component';
 import { EditPlayerComponent } from '../edit-player/edit-player.component';
-
+import {Overlay} from '@angular/cdk/overlay';
 
 
 @Component({
@@ -31,7 +31,7 @@ export class GameComponent implements OnInit {
   // service: CardjsonService = inject(CardjsonService);                     // Alternativ auch so zu schreiben
 
 
-  constructor(private route: ActivatedRoute, public dialog: MatDialog, private service: CardjsonService) {
+  constructor(private route: ActivatedRoute, public dialog: MatDialog, private service: CardjsonService, public overlay: Overlay) {
 
   }
 
@@ -101,7 +101,7 @@ export class GameComponent implements OnInit {
       if (result && result.length > 0) {
         this.game.players.push(result);
         this.game.player_images.push('penguin-4871045_640.png');
-
+        scrollStrategy: this.overlay.scrollStrategies.noop() 
         this.updateGame();
       }
     });

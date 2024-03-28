@@ -6,6 +6,8 @@ import { initializeApp, provideFirebaseApp } from "@angular/fire/app";
 import { getFirestore, provideFirestore } from "@angular/fire/firestore";
 import { provideAnimations } from '@angular/platform-browser/animations';
 import { firebaseConfig } from './firebase.config';
+import { Overlay } from "@angular/cdk/overlay";
+import { MAT_DIALOG_SCROLL_STRATEGY } from "@angular/material/dialog";
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -13,6 +15,12 @@ export const appConfig: ApplicationConfig = {
     provideAnimationsAsync(),
     importProvidersFrom(provideFirebaseApp(() => initializeApp(firebaseConfig))),
     importProvidersFrom(provideFirestore(() => getFirestore())),
-    provideAnimations()
+    provideAnimations(),
+
+    {
+      provide: MAT_DIALOG_SCROLL_STRATEGY,
+      useFactory: (overlay: Overlay) => () => overlay.scrollStrategies.noop(), // Hier wird die Scrollstrategie konfiguriert
+      deps: [Overlay]
+    }
   ],
 };
